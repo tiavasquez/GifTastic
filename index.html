@@ -26,7 +26,7 @@
 
     // Initial array of animals
     var animals = ["dog", "cat", "goat", "armadillo", "peacock", "pig", "hedgehog"];
-
+    // call the function to put the buttons on the screen
     renderButtons();
 
     // Function for displaying animal buttons
@@ -52,12 +52,12 @@
         a.text(animal);
         // Adding the button to the HTML
         $("#animal-buttons").append(a);
-
+        
     }
 
     // This function is called when the Submit button is clicked to add an animal button
     $("#add-animal").on("click", function(event) {
-        
+
         event.preventDefault();
         // This line will grab the text from the input box
         var animal = $("#animal-input").val().trim();
@@ -65,58 +65,52 @@
         animals.push(animal);
         // add the new animal button
         appendButton(animal);
-        //TODO: somehow the data-name is not getting added for the new button???
+        renderButtons();
      });
     
-    //--------------------------end of functions and code to display buttons, the form, and adding a button-----------------//
-
-    $("button").on("click", function() {
-      // Grabbing and storing the data-animal property value from the button
+    // This function is called when one of the animals buttons is clicked. 
+    //It will use ajax to get 10 images from giphy  
+    $(document).on("click", "button", function() {
       
-    var animal = $(this).attr("data-name");
+        var animal = $(this).attr("data-name");
+        var myApiKey = "qfVsi713bNzjI6a9qOH1uo6KJACHjiQM";
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=" + myApiKey + "&limit=10";
 
-    var myApiKey = "qfVsi713bNzjI6a9qOH1uo6KJACHjiQM";
+        // Performing an AJAX request with the queryURL
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+        // After data comes back from the request
+        .done(function(response) {
+            
+            // storing the data from the AJAX request in the results variable
+            var results = response.data;
 
-    var searchInput = "chinchilla";
+            // empty out what was in div so we only have the images for the button clicked
+            $("#animal-display").empty();
 
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=" + myApiKey + "&limit=10";
-    //var queryURL = "https://api.giphy.com/v1/gifs/search?q=chinchilla&api_key=VySk58gwMa51o1FHQqT0RGa4Sj3A9uDR&limit=10";
+            // Looping through each result item
+            for (var i = 0; i < results.length; i++) {
 
-    // Performing an AJAX request with the queryURL
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-      })
-      // After data comes back from the request
-      .done(function(response) {
-        
-        // storing the data from the AJAX request in the results variable
-        var results = response.data;
+                // Creating and storing a div tag
+                var animalDiv = $("<div id=\"rating-and-image\">");
 
-         // empty out what was in div so we only have the images for the button clicked
-         $("#animal-display").empty();
+                // Creating a paragraph tag with the rating
+                var p = $("<p>").text("Rating: " + results[i].rating);
 
-        // Looping through each result item
-        for (var i = 0; i < results.length; i++) {
+                // Creating and storing an image tag
+                var animalImage = $("<img>");
 
-            // Creating and storing a div tag
-            var animalDiv = $("<div id=\"rating-and-image\">");
+                // Setting the src attribute of the image to a property pulled off the result item
+                animalImage.attr("src", results[i].images.fixed_height.url);
 
-            // Creating a paragraph tag with the rating
-            var p = $("<p>").text("Rating: " + results[i].rating);
+                // Appending the paragraph and image tag to the animalDiv
+                animalDiv.append(p);
+                animalDiv.append(animalImage);
 
-            // Creating and storing an image tag
-            var animalImage = $("<img>");
-
-            // Setting the src attribute of the image to a property pulled off the result item
-            animalImage.attr("src", results[i].images.fixed_height.url);
-
-            // Appending the paragraph and image tag to the animalDiv
-            animalDiv.append(p);
-            animalDiv.append(animalImage);
-
-            $("#animal-display").append(animalDiv);
-        }
+                $("#animal-display").append(animalDiv);
+            }
       
     });
 
