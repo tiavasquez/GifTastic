@@ -1,0 +1,25 @@
+p {
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: bold;
+}
+ 
+#rating-and-image {
+     float: left;
+     margin-right: 20px;
+ }
+
+#animal-display {
+
+}
+
+#animal-buttons {
+
+}
+
+#add-animal-form {
+
+}
+
+button {
+    margin: 10px;
+}
