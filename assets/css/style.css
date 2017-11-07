@@ -8,18 +8,10 @@ p {
      margin-right: 20px;
  }
 
-#animal-display {
-
-}
-
-#animal-buttons {
-
-}
-
-#add-animal-form {
-
-}
-
 button {
     margin: 10px;
+    background: teal;
+    color: white; 
+    padding: 10px 20px;
+    font-size: 18px;   
 }
